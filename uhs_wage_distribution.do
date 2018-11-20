@@ -18,7 +18,7 @@ cd "..\input"
 ***** I. Keep the Key Variables for Analysis *****
 use wage_1st_tier_cities_2002_2009.dta ,clear 
 sort year cname
-egen yc = group(year cname)
+egen yc = group(year cityid)
 
 gen lwage = ln(month_wage)
 gen lminiwage = ln(miniwage)
