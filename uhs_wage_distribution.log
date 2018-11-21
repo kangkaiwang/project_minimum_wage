@@ -1,0 +1,762 @@
+
+  ___  ____  ____  ____  ____ (R)
+ /__    /   ____/   /   ____/
+___/   /   /___/   /   /___/   14.1   Copyright 1985-2015 StataCorp LP
+  Statistics/Data Analysis            StataCorp
+                                      4905 Lakeway Drive
+     MP - Parallel Edition            College Station, Texas 77845 USA
+                                      800-STATA-PC        http://www.stata.com
+                                      979-696-4600        stata@stata.com
+                                      979-696-4601 (fax)
+
+Single-user 8-core Stata perpetual license:
+       Serial number:  10699393
+         Licensed to:  www.ddooo.com
+                       仅供学习
+
+Notes:
+      1.  Stata is running in batch mode.
+      2.  Unicode is supported; see help unicode_advice.
+      3.  More than 2 billion observations are allowed; see help obs_advice.
+      4.  Maximum number of variables is set to 5000; see help set_maxvar.
+
+
+running C:\Program Files (x86)\Stata14\profile.do ...
+
+. do C:\Users\hp\Desktop\Minimum_Wage_UHS\analysis\code\uhs_wage_distribution.d
+> o 
+
+. *Author: Kangkai Wang
+. *Version: Stata/MP 14.1
+. *File：uhs_wage_distribution.do
+. *This program analyses wage distribution in four first-tier cities in China c
+> ompared with minimum wage line
+. 
+. *Input files: 1) wage_1st_tier_cities_2002_2009.dta                  
+. 
+. 
+. *****************************************************************************
+> *
+. *   Is Minimum Wage Binding in China ? Evidence from the First-Tier Cities   
+> *
+. *****************************************************************************
+> *
+. 
+. 
+. global path "C:\Users\hp\Desktop\Minimum_Wage_UHS\analysis"
+
+. 
+. cd "..\input"
+C:\Users\hp\Desktop\Minimum_Wage_UHS\analysis\input
+
+. 
+. ***** I. Keep the Key Variables for Analysis *****
+. use wage_1st_tier_cities_2002_2009.dta ,clear 
+
+. sort year cname
+
+. egen yc = group(year cname)
+
+. 
+. gen lwage = ln(month_wage)
+
+. gen lminiwage = ln(miniwage)
+
+. gen lowage = 1 if month_wage < miniwage
+(42,325 missing values generated)
+
+. replace lowage = 0 if month_wage >= miniwage
+(42,325 real changes made)
+
+. 
+. set more off
+
+. *** 1. Beijing
+. forvalue i = 1(4)29{                  
+  2.         sum lminiwage if yc == `i'
+  3.         local miniwage = r(mean)
+  4.         sum lowage if yc == `i'
+  5.         local j = round(r(mean)*100)
+  6.         sum month_wage if yc == `i'
+  7.         local w = round(r(mean))
+  8.         sum month_wage if yc == `i'
+  9.         local w = round(r(mean))
+ 10.         count if yc == `i'
+ 11.         local n = r(N)
+ 12.         
+.         local lineopt ",lp(dash) lc(red)"
+ 13.         tw hist lwage if yc == `i',xline(`miniwage'`lineopt') width(0.26) 
+> ///
+>         lcolor(white) fcolor(blue) fintensity(inten100) legend(off) ///
+>         ylabel(0(0.4)0.8) xlabel(4(2)12) ///
+>         || kdensity lwage if yc == `i',color(orange) ///
+>         scheme(s1mono) ytitle("密度",size(small)) xtitle("对数工资",size(smal
+> l)) ///
+>         subtitle("北京市",size(small)) saving("..\temp\wage_`i'.gph",replace)
+>  ///
+>         text(0.7 5 "`j'%" ///
+>                  0.7 10 "观测值 = `n'" ///
+>                  0.5 10 "月平均工资 = `w'",place(n) size(vsmall))
+ 14. }
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+   lminiwage |      1,646    6.142037           0   6.142037   6.142037
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+      lowage |      1,646    .1391252    .3461823          0          1
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+  month_wage |      1,646    1240.412    800.4228        100       7000
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+  month_wage |      1,646    1240.412    800.4228        100       7000
+  1,646
+(file ..\temp\wage_1.gph saved)
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+   lminiwage |      1,696    6.204558           0   6.204558   6.204558
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+      lowage |      1,696    .1267689     .332812          0          1
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+  month_wage |      1,696     1403.77    915.3472        100   7895.833
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+  month_wage |      1,696     1403.77    915.3472        100   7895.833
+  1,696
+(file ..\temp\wage_5.gph saved)
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+   lminiwage |      3,357    6.300786           0   6.300786   6.300786
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+      lowage |      3,357    .1444742    .3516223          0          1
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+  month_wage |      3,357    1607.037    1174.482        100    11790.5
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+  month_wage |      3,357    1607.037    1174.482        100    11790.5
+  3,357
+(file ..\temp\wage_9.gph saved)
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+   lminiwage |      3,472    6.363028           0   6.363028   6.363028
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+      lowage |      3,472    .1267281    .3327161          0          1
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+  month_wage |      3,472    1824.466    1337.868        100   10602.83
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+  month_wage |      3,472    1824.466    1337.868        100   10602.83
+  3,472
+(file ..\temp\wage_13.gph saved)
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+   lminiwage |      3,506    6.461468           0   6.461468   6.461468
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+      lowage |      3,506    .1149458     .319002          0          1
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+  month_wage |      3,506    2113.838    1535.131        100   24166.67
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+  month_wage |      3,506    2113.838    1535.131        100   24166.67
+  3,506
+(file ..\temp\wage_17.gph saved)
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+   lminiwage |      4,716    6.593045           0   6.593045   6.593045
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+      lowage |      4,716    .1019932    .3026715          0          1
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+  month_wage |      4,716    2358.049    1604.628        100      13796
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+  month_wage |      4,716    2358.049    1604.628        100      13796
+  4,716
+(file ..\temp\wage_21.gph saved)
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+   lminiwage |      7,220    6.684612           0   6.684612   6.684612
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+      lowage |      7,220     .134072    .3407533          0          1
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+  month_wage |      7,220    2609.861    2090.428        100   31183.21
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+  month_wage |      7,220    2609.861    2090.428        100   31183.21
+  7,220
+(file ..\temp\wage_25.gph saved)
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+   lminiwage |      6,252    6.684612           0   6.684612   6.684612
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+      lowage |      6,252      .06238    .2418639          0          1
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+  month_wage |      6,252    2967.804    2018.194        100   30060.47
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+  month_wage |      6,252    2967.804    2018.194        100   30060.47
+  6,252
+(file ..\temp\wage_29.gph saved)
+
+. *** 2. Shanghai
+. forvalue i = 2(4)30{                 
+  2.         sum lminiwage if yc == `i'
+  3.         local miniwage = r(mean)
+  4.         sum lowage if yc == `i'
+  5.         local j = round(r(mean)*100)
+  6.         sum month_wage if yc == `i'
+  7.         local w = round(r(mean))
+  8.         count if yc == `i'
+  9.         local n = r(N)
+ 10.         local lineopt ",lp(dash) lc(red)"
+ 11.         tw hist lwage if yc == `i',xline(`miniwage'`lineopt') width(0.26) 
+> ///
+>         lcolor(white) fcolor(blue) fintensity(inten100) legend(off) ///
+>         ylabel(0(0.4)0.8) xlabel(4(2)12) ///
+>         || kdensity lwage if yc == `i',color(orange) ///
+>         scheme(s1mono) ytitle("密度",size(small)) xtitle("对数工资",size(smal
+> l)) ///
+>         subtitle("上海市",size(small)) saving("..\temp\wage_`i'.gph",replace)
+>  ///
+>         text(0.7 5 "`j'%" ///
+>                  0.7 10 "观测值 = `n'" ///
+>                  0.5 10 "月平均工资 = `w'",place(n) size(vsmall))
+ 12. }
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+   lminiwage |        764    6.282267           0   6.282267   6.282267
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+      lowage |        764    .2120419    .4090221          0          1
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+  month_wage |        764     1349.62    1021.527        103       8075
+  764
+(file ..\temp\wage_2.gph saved)
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+   lminiwage |      1,063    6.282267           0   6.282267   6.282267
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+      lowage |      1,063    .3236124    .4680743          0          1
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+  month_wage |      1,063    1307.113    1439.856        100   12795.67
+  1,063
+(file ..\temp\wage_6.gph saved)
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+   lminiwage |      1,605    6.345636           0   6.345636   6.345636
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+      lowage |      1,605    .1190031    .3238931          0          1
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+  month_wage |      1,605    2021.971    1908.559        100   26666.67
+  1,605
+(file ..\temp\wage_10.gph saved)
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+   lminiwage |      1,598    6.453625           0   6.453625   6.453625
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+      lowage |      1,598    .1138924    .3177799          0          1
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+  month_wage |      1,598    2201.676    2033.878        100   20666.67
+  1,598
+(file ..\temp\wage_14.gph saved)
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+   lminiwage |      1,662    6.536692           0   6.536692   6.536692
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+      lowage |      1,662    .1034898    .3046892          0          1
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+  month_wage |      1,662    2388.213    2283.344   106.6667   30381.96
+  1,662
+(file ..\temp\wage_18.gph saved)
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+   lminiwage |      1,726    6.620073           0   6.620073   6.620073
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+      lowage |      1,726    .1013905    .3019326          0          1
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+  month_wage |      1,726     2738.61    2477.539        100   29818.65
+  1,726
+(file ..\temp\wage_22.gph saved)
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+   lminiwage |        546    6.866933           0   6.866933   6.866933
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+      lowage |        546    .1062271    .3084106          0          1
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+  month_wage |        546    3530.835    3434.531   108.3333   31356.33
+  546
+(file ..\temp\wage_26.gph saved)
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+   lminiwage |        437    6.866933           0   6.866933   6.866933
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+      lowage |        437    .0961098    .2950796          0          1
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+  month_wage |        437    3613.868    3617.622        100   32616.67
+  437
+(file ..\temp\wage_30.gph saved)
+
+. *** 3. Guangzhou
+. forvalue i = 3(4)31{                     
+  2.         sum lminiwage if yc == `i'
+  3.         local miniwage = r(mean)
+  4.         sum lowage if yc == `i'
+  5.         local j = round(r(mean)*100)
+  6.         sum month_wage if yc == `i'
+  7.         local w = round(r(mean))
+  8.         count if yc == `i'
+  9.         local n = r(N)
+ 10.         local lineopt ",lp(dash) lc(red)"
+ 11.         tw hist lwage if yc == `i',xline(`miniwage'`lineopt') width(0.26) 
+> ///
+>         lcolor(white) fcolor(blue) fintensity(inten100) legend(off) ///
+>         ylabel(0(0.4)0.8) xlabel(4(2)12) ///
+>         || kdensity lwage if yc == `i',color(orange) ///
+>         scheme(s1mono) ytitle("密度",size(small)) xtitle("对数工资",size(smal
+> l)) ///
+>         subtitle("广州市",size(small)) saving("..\temp\wage_`i'.gph",replace)
+>  ///
+>         text(0.7 5 "`j'%" ///
+>                  0.7 10 "观测值 = `n'" ///
+>                  0.5 10 "月平均工资 = `w'",place(n) size(vsmall))
+ 12. }
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+   lminiwage |        499    6.109248           0   6.109248   6.109248
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+      lowage |        499    .0501002    .2183706          0          1
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+  month_wage |        499     1880.79    1218.489        100   8083.333
+  499
+(file ..\temp\wage_3.gph saved)
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+   lminiwage |        515    6.234411           0   6.234411   6.234411
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+      lowage |        515    .0912621    .2882615          0          1
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+  month_wage |        515    2058.834    1471.458        100   8372.362
+  515
+(file ..\temp\wage_7.gph saved)
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+   lminiwage |        533    6.527958           0   6.527958   6.527958
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+      lowage |        533    .1369606    .3441287          0          1
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+  month_wage |        533    2260.986    1631.869        100   13255.13
+  533
+(file ..\temp\wage_11.gph saved)
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+   lminiwage |        519    6.527958           0   6.527958   6.527958
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+      lowage |        519    .1175337    .3223659          0          1
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+  month_wage |        519    2461.038      1769.8        100   15963.39
+  519
+(file ..\temp\wage_15.gph saved)
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+   lminiwage |        525    6.659294           0   6.659294   6.659294
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+      lowage |        525    .1161905    .3207588          0          1
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+  month_wage |        525    2678.574    1906.401        100   18316.28
+  525
+(file ..\temp\wage_19.gph saved)
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+   lminiwage |        554    6.659294           0   6.659294   6.659294
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+      lowage |        554    .0866426    .2815648          0          1
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+  month_wage |        554    2898.285    1970.845   166.6667   13395.83
+  554
+(file ..\temp\wage_23.gph saved)
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+   lminiwage |        245    6.756932           0   6.756932   6.756932
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+      lowage |        245    .1183673    .3237039          0          1
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+  month_wage |        245    3263.334    2256.894        200   14105.33
+  245
+(file ..\temp\wage_27.gph saved)
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+   lminiwage |        209    6.756932           0   6.756932   6.756932
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+      lowage |        209    .0526316     .223833          0          1
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+  month_wage |        209    3700.333    2000.574        300   10394.67
+  209
+(file ..\temp\wage_31.gph saved)
+
+. *** 4. Shenzhen
+. forvalue i = 4(4)32{                     
+  2.         sum lminiwage if yc == `i'
+  3.         local miniwage = r(mean)
+  4.         sum lowage if yc == `i'
+  5.         local j = round(r(mean)*100)
+  6.         sum month_wage if yc == `i'
+  7.         local w = round(r(mean))
+  8.         count if yc == `i'
+  9.         local n = r(N)
+ 10.         local lineopt ",lp(dash) lc(red)"
+ 11.         tw hist lwage if yc == `i',xline(`miniwage'`lineopt') width(0.26) 
+> ///
+>         lcolor(white) fcolor(blue) fintensity(inten100) legend(off) ///
+>         ylabel(0(0.4)0.8) xlabel(4(2)12) ///
+>         || kdensity lwage if yc == `i',color(orange) ///
+>         scheme(s1mono) ytitle("密度",size(small)) xtitle("对数工资",size(smal
+> l)) ///
+>         subtitle("深圳市",size(small)) saving("..\temp\wage_`i'.gph",replace)
+>  ///
+>         text(0.7 5 "`j'%" ///
+>                  0.7 10 "观测值 = `n'" ///
+>                  0.5 10 "月平均工资 = `w'",place(n) size(vsmall))
+ 12. }
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+   lminiwage |        178    6.131227           0   6.131227   6.131227
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+      lowage |        178    .0224719    .1486305          0          1
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+  month_wage |        178     2960.87    1609.906   168.0417   6937.375
+  178
+(file ..\temp\wage_4.gph saved)
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+   lminiwage |        331    6.131227           0   6.131227   6.131227
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+      lowage |        331     .223565    .4172645          0          1
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+  month_wage |        331    1611.974    1497.137        100      11500
+  331
+(file ..\temp\wage_8.gph saved)
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+   lminiwage |        176    6.173786           0   6.173786   6.173786
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+      lowage |        176    .0397727    .1959824          0          1
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+  month_wage |        176    3419.263     2786.43   106.2917   22916.67
+  176
+(file ..\temp\wage_12.gph saved)
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+   lminiwage |        181    6.363028           0   6.363028   6.363028
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+      lowage |        181    .0552486    .2290986          0          1
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+  month_wage |        181     3760.91    2874.235     143.75   14886.06
+  181
+(file ..\temp\wage_16.gph saved)
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+   lminiwage |        166     6.55108           0    6.55108    6.55108
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+      lowage |        166    .0481928    .2148214          0          1
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+  month_wage |        166    4226.081    2721.734   101.6667   13827.68
+  166
+(file ..\temp\wage_20.gph saved)
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+   lminiwage |        172    6.620073           0   6.620073   6.620073
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+      lowage |        172    .0523256    .2233329          0          1
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+  month_wage |        172    4260.945    2597.398   210.6575   12166.67
+  172
+(file ..\temp\wage_24.gph saved)
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+   lminiwage |        888    6.802395           0   6.802395   6.802395
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+      lowage |        888    .0698198    .2549867          0          1
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+  month_wage |        888    3721.942    2399.232        125   14833.33
+  888
+(file ..\temp\wage_28.gph saved)
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+   lminiwage |        905    6.802395           0   6.802395   6.802395
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+      lowage |        905     .078453    .2690318          0          1
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+  month_wage |        905    3951.288    2856.796        125   20239.17
+  905
+(file ..\temp\wage_32.gph saved)
+
+. 
+. *** 1.2 Combine the Graphs
+. ** 1.2.1 Wage
+. set more off
+
+. local y = 2002
+
+. forvalue i = 1(4)29{    
+  2.         local a = `i' + 1
+  3.         local b = `i' + 2
+  4.         local c = `i' + 3
+  5.         gr combine "..\temp\wage_`i'.gph" "..\temp\wage_`a'.gph" "..\temp\
+> wage_`b'.gph" "..\temp\wage_`c'.gph", ///
+>         col(2) iscale(1) ycommon xcommon ///
+>         graphregion(color(white)) plotregion(color(white)) ///
+>         title("`y'年一线城市工资分布 (UHS数据)") ///
+>         subtitle("（工资及补贴收入）") ///
+>         note("注：本图所使用的工资数据是指每月工资及补贴收入（由年工资及补贴
+> 收入除以12计算而来），图中" ///
+>                 "红线表示`y'年各一线城市最低工资对数值，其左侧数字代表最低工
+> 资线以下样本占比，其右侧标注" ///
+>                 "了观测值数目以及月平均名义工资（此处工资指工资及补贴收入）；
+> 深圳市在2002至2009年期间在特" ///
+>                 "和特区外（指宝安区和龙岗区）执行两重标准的最低工资，但UHS数
+> 据中深圳市无法识别到区县层面，" ///
+>                 "因此本图中使用的均是特区内最低工资标准。") 
+  6.         gr export "..\documentation\wage_distr_`y'.png",replace width(1600
+> ) height(1200)
+  7.         local y = `y' + 1
+  8. }
+(note:  clockdir by_legend_position not found in scheme, default attributes
+        used)
+(note:  clockdir zyx2legend_position not found in scheme, default attributes
+        used)
+(note:  clockdir by_legend_position not found in scheme, default attributes
+        used)
+(note:  clockdir zyx2legend_position not found in scheme, default attributes
+        used)
+(file ..\documentation\wage_distr_2002.png written in PNG format)
+(note:  clockdir by_legend_position not found in scheme, default attributes
+        used)
+(note:  clockdir zyx2legend_position not found in scheme, default attributes
+        used)
+(note:  clockdir by_legend_position not found in scheme, default attributes
+        used)
+(note:  clockdir zyx2legend_position not found in scheme, default attributes
+        used)
+(file ..\documentation\wage_distr_2003.png written in PNG format)
+(note:  clockdir by_legend_position not found in scheme, default attributes
+        used)
+(note:  clockdir zyx2legend_position not found in scheme, default attributes
+        used)
+(note:  clockdir by_legend_position not found in scheme, default attributes
+        used)
+(note:  clockdir zyx2legend_position not found in scheme, default attributes
+        used)
+(file ..\documentation\wage_distr_2004.png written in PNG format)
+(note:  clockdir by_legend_position not found in scheme, default attributes
+        used)
+(note:  clockdir zyx2legend_position not found in scheme, default attributes
+        used)
+(note:  clockdir by_legend_position not found in scheme, default attributes
+        used)
+(note:  clockdir zyx2legend_position not found in scheme, default attributes
+        used)
+(file ..\documentation\wage_distr_2005.png written in PNG format)
+(note:  clockdir by_legend_position not found in scheme, default attributes
+        used)
+(note:  clockdir zyx2legend_position not found in scheme, default attributes
+        used)
+(note:  clockdir by_legend_position not found in scheme, default attributes
+        used)
+(note:  clockdir zyx2legend_position not found in scheme, default attributes
+        used)
+(file ..\documentation\wage_distr_2006.png written in PNG format)
+(note:  clockdir by_legend_position not found in scheme, default attributes
+        used)
+(note:  clockdir zyx2legend_position not found in scheme, default attributes
+        used)
+(note:  clockdir by_legend_position not found in scheme, default attributes
+        used)
+(note:  clockdir zyx2legend_position not found in scheme, default attributes
+        used)
+(file ..\documentation\wage_distr_2007.png written in PNG format)
+(note:  clockdir by_legend_position not found in scheme, default attributes
+        used)
+(note:  clockdir zyx2legend_position not found in scheme, default attributes
+        used)
+(note:  clockdir by_legend_position not found in scheme, default attributes
+        used)
+(note:  clockdir zyx2legend_position not found in scheme, default attributes
+        used)
+(file ..\documentation\wage_distr_2008.png written in PNG format)
+(note:  clockdir by_legend_position not found in scheme, default attributes
+        used)
+(note:  clockdir zyx2legend_position not found in scheme, default attributes
+        used)
+(note:  clockdir by_legend_position not found in scheme, default attributes
+        used)
+(note:  clockdir zyx2legend_position not found in scheme, default attributes
+        used)
+(file ..\documentation\wage_distr_2009.png written in PNG format)
+
+. 
+. 
+end of do-file
