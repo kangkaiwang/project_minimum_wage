@@ -26,7 +26,7 @@ running C:\Program Files (x86)\Stata14\profile.do ...
 . do C:\Users\hp\Desktop\Minimum_Wage_UHS\analysis\code\uhs_wage_distribution.d
 > o 
 
-. *Author: Kangkai Wang （JNU-IESR）
+. *Author: Kangkai Wang
 . *Version: Stata/MP 14.1
 . *File：uhs_wage_distribution.do
 . *This program analyses wage distribution in four first-tier cities in China c
