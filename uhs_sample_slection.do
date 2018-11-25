@@ -12,7 +12,6 @@
 *   Is Minimum Wage Binding in China ? Evidence from the First-Tier Cities   *
 ******************************************************************************
 
-
 global path "C:\Users\hp\Desktop\Minimum_Wage_UHS\build"
 
 cd "C:\Users\hp\Desktop\Minimum_Wage_UHS\build\input"
