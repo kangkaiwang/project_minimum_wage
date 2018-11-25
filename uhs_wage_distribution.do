@@ -13,7 +13,7 @@
 
 global path "C:\Users\hp\Desktop\Minimum_Wage_UHS\analysis"
 
-cd "..\input"
+cd "C:\Users\hp\Desktop\Minimum_Wage_UHS\analysis\input"
 
 ***** I. Keep the Key Variables for Analysis *****
 use wage_1st_tier_cities_2002_2009.dta ,clear 
@@ -125,7 +125,7 @@ forvalue i = 1(4)29{
 	gr combine "..\temp\wage_`i'.gph" "..\temp\wage_`a'.gph" "..\temp\wage_`b'.gph" "..\temp\wage_`c'.gph", ///
 	col(2) iscale(1) ycommon xcommon ///
 	graphregion(color(white)) plotregion(color(white)) ///
-	title("`y'年一线城市工资分布 (UHS数据)") ///
+	title("`y'年一线城市工资分布 (UHS数据)",size(large)) ///
 	subtitle("（工资及补贴收入）") ///
 	note("注：本图所使用的工资数据是指每月工资及补贴收入（由年工资及补贴收入除以12计算而来），图中" ///
 		"红线表示`y'年各一线城市最低工资对数值，其左侧数字代表最低工资线以下样本占比，其右侧标注" ///
